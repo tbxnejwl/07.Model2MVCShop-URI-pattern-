@@ -124,13 +124,19 @@
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
+		<td class="ct_list_b" width="150">상품이미지</td>		
 		<td class="ct_list_b" width="150">상품명</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">가격</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">등록일</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">현재상태</td>	
+		<td class="ct_list_b">현재상태</td>
+		
+		<c:if test="${user.role.equals('admin') && param.menu=='manage'}">
+			<td class="ct_list_b">제품삭제</td>
+			<td class="ct_line02"></td>
+		</c:if>	
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -141,6 +147,12 @@
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
+			
+			<td>
+			<div style="width: 90px; height: 90px; overflow: hidden">
+			<img src = "/images/uploadFiles/${product.fileName}" style="max-width: 100%; height: 100%;"/>
+			</div>
+			</td>
 						
 			<c:if test="${param.menu == 'manage' }" >		
 				<td align="left"><a href="/product/updateProduct?prodNo=${product.prodNo}&menu=manage">${product.prodName}</a></td>
@@ -155,6 +167,7 @@
 			
 			<td align="left">${product.regDate}</td>
 			<td></td>
+			
 			<c:choose>
 	
 			<c:when test="${user.role.equals('admin') }">
@@ -208,7 +221,12 @@
 			</c:otherwise>
 		</c:choose>
 												
-		</tr>
+		
+		<c:if test="${user.role.equals('admin') && param.menu=='manage'}">
+		<td align="left">
+		<a href="/product/deleteProduct?prodNo=${product.prodNo}&menu=manage">제품삭제</td>
+		<td></td>
+		</c:if>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>
@@ -219,7 +237,7 @@
 	<tr>
 		<td align="center">
 
-		<input type="hidden" id="currentPage" name="currentPage" value=""/>
+		<input type="hidden" id="currentPage" name="currentPage" value="0"/>
 			<jsp:include page="../common/pageNavigator.jsp"/>
 		
 					

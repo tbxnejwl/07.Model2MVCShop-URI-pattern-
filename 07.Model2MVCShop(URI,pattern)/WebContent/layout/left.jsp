@@ -92,6 +92,7 @@ function history(){
 					<a href="/purchase/listPurchase"  target="rightFrame">구매이력조회</a>
 				</td>
 			</tr>
+			
 			</c:if>
 			
 			<tr>

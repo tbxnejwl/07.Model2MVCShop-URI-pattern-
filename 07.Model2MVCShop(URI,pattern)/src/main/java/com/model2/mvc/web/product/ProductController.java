@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
@@ -22,12 +23,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.CookieGenerator;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 
@@ -61,10 +64,18 @@ public class ProductController {
 	}
 	
 	@RequestMapping(value = "addProduct", method=RequestMethod.POST)
-	public String addProduct(@ModelAttribute("product") Product product, Model model, HttpServletRequest request ) throws Exception{
+	public String addProduct( @ModelAttribute("product") Product product, 
+			@RequestParam("file") MultipartFile file) throws Exception{
 		
 		System.out.println("/product/addProduct : POST");
 		
+		File f = new File("C:\\Users\\ghdgh\\git\\07.Model2MVCShop(URI,pattern)\\07.Model2MVCShop(URI,pattern)\\WebContent\\images\\uploadFiles\\"+file.getOriginalFilename());
+		file.transferTo(f);
+	
+		
+		product.setFileName(file.getOriginalFilename());
+		
+/*		
 		if(FileUpload.isMultipartContent(request)) {
 			String temDir = "C:\\workspace\\07.Model2MVCShop(URI,pattern)\\WebContent\\images\\uploadFiles\\";
 			
@@ -113,8 +124,7 @@ public class ProductController {
 					}
 				}
 				
-				productService.addProduct(product);
-				model.addAttribute("product", product);
+				
 			} else {
 				int overSize = (request.getContentLength() / 1000000);
 				System.out.println("<script>alery('파일의 크기는 1MB까지 입니다. 올리신 파일용량은" + overSize + "MB입니다');");
@@ -123,8 +133,11 @@ public class ProductController {
 		} else {
 			System.out.println("인코딩 타입이 multipart/form-data가 아닙니다..");
 		}
+		*/
+		productService.addProduct(product);
 		
-		return "forward:/product/addProduct.jsp";
+		return "redirect:/product/listProduct?menu=manage&orderby=";
+
 	}
 	
 	@RequestMapping(value="getProduct", method=RequestMethod.GET)
@@ -199,11 +212,18 @@ public class ProductController {
 	}
 		
 	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
-	public ModelAndView updateProduct( @ModelAttribute("product") Product product) throws Exception{
+	public ModelAndView updateProduct( @ModelAttribute("product") Product product, 
+			@RequestParam("file") MultipartFile file) throws Exception{
 
 		System.out.println("/product/updateProduct : POST");
 		//Business Logic
+		File f = new File("C:\\Users\\ghdgh\\git\\07.Model2MVCShop(URI,pattern)\\07.Model2MVCShop(URI,pattern)\\WebContent\\images\\uploadFiles\\"+file.getOriginalFilename());
+		file.transferTo(f);
+		
+		product.setFileName(file.getOriginalFilename());
+		
 		productService.updateProduct(product);
+		
 		
 		//int prodNo = Integer.parseInt(request.getParameter("prodNo"));
 	
@@ -212,6 +232,28 @@ public class ProductController {
 		
 		return modelAndView;
 	
+	}
+	
+	@RequestMapping(value="deleteProduct",method=RequestMethod.GET)
+	public String deletePurchaseView( @RequestParam("prodNo") int prodNo , Model model, HttpSession session ) throws Exception{
+
+		System.out.println("/deleteProductView.do");
+		//Business Logic
+		Product product = productService.getProduct(prodNo);
+		model.addAttribute("product", product);
+
+		// Model 과 View 연결
+
+		return "forward:/product/deleteProductView.jsp";
+	}
+	
+	@RequestMapping(value="deleteProduct", method=RequestMethod.POST)
+	public String deletePurchase (@RequestParam("prodNo") int prodNo, Model model) throws Exception{
+		System.out.println("/deleteProduct.do");
+		
+		productService.deleteProduct(prodNo);
+		
+		return "forward:/product/deleteProduct.jsp";
 	}
 
 }

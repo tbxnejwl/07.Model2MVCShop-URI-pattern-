@@ -2,10 +2,13 @@ package com.model2.mvc.service.domain;
 
 import java.sql.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 public class Product {
 	
 	private String fileName;
+	private MultipartFile uploadfile;
 	private String manuDate;
 	private int price;
 	private String prodDetail;
@@ -71,5 +74,13 @@ public class Product {
 		return "ProductVO : [fileName]" + fileName
 				+ "[manuDate]" + manuDate+ "[price]" + price + "[prodDetail]" + prodDetail
 				+ "[prodName]" + prodName + "[prodNo]" + prodNo + "[regDate]" + regDate+ "[proTranCode]" + proTranCode;
+	}
+
+	public MultipartFile getUploadfile() {
+		return uploadfile;
+	}
+
+	public void setUploadfile(MultipartFile uploadfile) {
+		this.uploadfile = uploadfile;
 	}	
 }

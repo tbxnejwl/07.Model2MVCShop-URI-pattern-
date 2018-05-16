@@ -8,12 +8,12 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
-<title>상품 목록조회</title>
+<title>상품 삭제</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post">
+<form name="deleteProduct" method="post" action="/product/deleteProduct?prodNo=${product.prodNo}&menu=manage">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -21,7 +21,7 @@
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="93%" class="ct_ttl01">상품상세조회</td>
+					<td width="93%" class="ct_ttl01">상품정보</td>
 					<td width="20%" align="right">&nbsp;</td>
 				</tr>
 			</table>
@@ -44,7 +44,7 @@
 		<td class="ct_write01">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="105">${product.prodNo }</td>
+					<td width="105">${param.prodNo }</td>
 				</tr>
 			</table>
 		</td>
@@ -108,21 +108,7 @@
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
-	<tr>
-		<td width="104" class="ct_write">수량</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-				<td class="ct_write01">
-				<select name="amount">
-						<c:forEach begin="1" end="10" var="i">
-							<option value="${i}">${i}</option>
-						</c:forEach>
-				</select>&nbsp;개</td>
-			</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	
+
 </table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
@@ -133,40 +119,17 @@
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 		<c:if test="${user.role=='admin' }">
+
 			<td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23" />
 			</td>
 			<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-			<a href="/product/updateProduct?prodNo=${product.prodNo}&menu=manage">
-			수정
-			</a>
+			<input type="submit" value="삭제"/>
 			</td>
 			<td width="14" height="23">
 			<img src="/images/ct_btnbg03.gif" width="14" height="23">
 			</td>
+	
 			<td width="30"></td>
-
-		</c:if>
-		
-		<c:if test="${empty user.role }">
-		*구매를 원하시면 로그인 해주세요
-		</c:if>															
-		<c:if test="${param.menu=='search' && (!empty user.role || user.role=='admin') }">
-			<c:choose>
-			<c:when test="${product.proTranCode != '1'}">
-			*판매된 상품은 구매하실 수 없습니다.
-			</c:when>
-			<c:otherwise>
-			<td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23" />
-			</td>
-			<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-			<a href="/purchase/addPurchase?prodNo=${product.prodNo}">
-			구매
-			</a>
-			</td>
-			<td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
-			<td width="30"></td>								
-			</c:otherwise>
-			</c:choose>
 		</c:if>
 			
 		<td width="17" height="23">

@@ -78,5 +78,12 @@ public class ProductDaoImpl implements ProductDao{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("ProductMapper.getTotalCount", search);
 	}
+	
+	@Override
+	public void deleteProduct(int prodNo) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.delete("ProductMapper.deleteProduct", prodNo);
+	}
+
 
 }
